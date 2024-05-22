@@ -10,7 +10,7 @@ influxdb_bucket = os.getenv("INFLUXDB_BUCKET")
 influxdb_org = os.getenv('INFLUXDB_ORG')
 influxdb_token = os.getenv("INFLUXDB_TOKEN")
 
-stack = os.getenv('STACK')
+stack = os.getenv('SCALABLE_STACK')
 polling_freq = int(os.getenv('POLLING_FREQ'))
 scale_up_thold = int(os.getenv('SCALE_UP_THRESHOLD'))
 scale_down_thold = int(os.getenv('SCALE_DOWN_THRESHOLD'))
@@ -39,7 +39,7 @@ scalable_services : List[Service] = []
 
 # Returns a list of lists of form:
 # [
-#   [cpu_percentage : double, service_id : string]
+#   [cpu_percentage : float, service_id : string]
 # ]
 def query_service_cpu_util() -> List[List[object]]:
     try:
@@ -82,7 +82,7 @@ def align_services_with_specs():
             print(f'Scaling service {service.spec.name} to {replica_minimum} replicas.')
             docker.service.scale({service: replica_minimum})
 
-def scale_from_cpu_util(services_data :  List[List[object]]):
+def scale_from_cpu_util(services_data : List[List[object]]):
     for service_data in services_data:
         service_id = service_data[1]
         service_utilization = service_data[0]
@@ -90,12 +90,11 @@ def scale_from_cpu_util(services_data :  List[List[object]]):
             if service.id == service_id:
                 replica_minimum, replica_maximum, current_replicas = get_service_info(service)
                 print(f'Service {service.__name__} is being analysed.')
-                if service_utilization > 100:
-                    continue
                 if service_utilization >= scale_up_thold and current_replicas < replica_maximum:
                     docker.service.scale({service: current_replicas + 1})
                 elif service_utilization <= scale_down_thold and current_replicas > replica_minimum:
                     docker.service.scale({service: current_replicas - 1})
+                break
 
 if __name__ == "__main__":
     scalable_services = get_scalable_services()

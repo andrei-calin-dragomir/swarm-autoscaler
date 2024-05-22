@@ -20,6 +20,6 @@ services:
       POLLING_FREQ: 1 #Polling once every POLLING_FREQ minutes
       SCALE_UP_THRESHOLD: 80 #CPU utilization at which to try scaling a service up 
       SCALE_DOWN_THRESHOLD: 25 #CPU utilization at which to try scaling a service down
-      STACK: 'monitoring'
+      SCALABLE_STACK: 'monitoring'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
