@@ -35,7 +35,9 @@ scalable-service:
 
 ## Deployment
 
-### Stand-alone version
+Fill in the configuration for your specific influxDB instance and stack of interest before deploying.
+
+### Stand-alone version (future)
 This deploys the autoscaler with the services it requires to gather data.
 
 ### Plug-and-play version
