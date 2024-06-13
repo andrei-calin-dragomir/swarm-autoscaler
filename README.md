@@ -1,4 +1,4 @@
-# swarm-autoscaler
+# swarm-orchestrator
 Container autoscaler for docker swarm stacks.
 
 ## Autoscaler (Work in progress)
