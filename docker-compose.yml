@@ -12,14 +12,22 @@ services:
         constraints: [node.role == manager]
     hostname: greenlab-autoscaler
   
+    networks: 
+      - greenlab-network
+    ports:
+      - "15000:5000"
+
     environment:
-      INFLUXDB_URL: 'http://145.108.225.7:8086'
+      INFLUXDB_URL: 'http://influxdb:18086'
       INFLUXDB_TOKEN: 'QpS3lFsRfCF20ODlvXdzUcsw5s18-FX1kSxEeJrXHNKHR-crw41OUzxEgR2XeSDeS8uTGgwEiLEbZUlKY8G-7A=='
       INFLUXDB_BUCKET: 'hpc_monitoring'
       INFLUXDB_ORG: 'greenlab'
-      POLLING_FREQ: 1 #Polling once every POLLING_FREQ minutes
-      SCALE_UP_THRESHOLD: 80 #CPU utilization at which to try scaling a service up 
-      SCALE_DOWN_THRESHOLD: 25 #CPU utilization at which to try scaling a service down
-      SCALABLE_STACK: 'monitoring'
+      DEFAULT_POLLING_FREQ: 1 #Polling once every POLLING_FREQ minutes
+      DEFAULT_SCALE_UP_THRESHOLD: 80 #CPU utilization at which to try scaling a service up 
+      DEFAULT_SCALE_DOWN_THRESHOLD: 25 #CPU utilization at which to try scaling a service down
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  greenlab-network:
+    external: true

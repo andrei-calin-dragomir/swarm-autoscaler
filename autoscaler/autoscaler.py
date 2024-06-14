@@ -10,10 +10,9 @@ influxdb_bucket = os.getenv("INFLUXDB_BUCKET")
 influxdb_org = os.getenv('INFLUXDB_ORG')
 influxdb_token = os.getenv("INFLUXDB_TOKEN")
 
-stack = os.getenv('SCALABLE_STACK')
-polling_freq = int(os.getenv('POLLING_FREQ'))
-scale_up_thold = int(os.getenv('SCALE_UP_THRESHOLD'))
-scale_down_thold = int(os.getenv('SCALE_DOWN_THRESHOLD'))
+polling_freq = int(os.getenv('DEFAULT_POLLING_FREQ'))
+scale_up_thold = int(os.getenv('DEFAULT_SCALE_UP_THRESHOLD'))
+scale_down_thold = int(os.getenv('DEFAULT_SCALE_DOWN_THRESHOLD'))
 
 # Initialize DB client
 db_client = influxdb_client.InfluxDBClient(url=influxdb_url, token=influxdb_token, org=influxdb_org)
@@ -22,8 +21,7 @@ db_query_client = db_client.query_api()
 # Query for CPU utilization of all active services
 cpu_util_data_query = f"""
 from(bucket: "{influxdb_bucket}")
-  |> range(start: -{polling_freq}m, stop: now())  
-  |> filter(fn: (r) => r["container_label_com_docker_stack_namespace"] == "{stack}")
+  |> range(start: -{polling_freq}m, stop: now())
   |> filter(fn: (r) => r["_measurement"] == "container_cpu_usage_seconds_total")
   |> filter(fn: (r) => r["_field"] == "counter")
   |> difference(nonNegative: true) // Calculate the per-second change
@@ -62,7 +60,7 @@ def get_service_info(service: Service):
     return replica_minimum, replica_maximum, current_replicas
 
 def get_scalable_services() -> List[Service]:
-    services : List[Service] = docker.service.list(filters={"label": f"com.docker.stack.namespace={stack}"})
+    services : List[Service] = docker.service.list()
 
     # List to hold the scalable services for the current stack
     scalable_services = []

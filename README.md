@@ -5,14 +5,17 @@ Container autoscaler for docker swarm stacks.
 This autoscaler makes use of the data sourced from CAdvisor and provides automated scaling based on the following parameters:
 - CPU Utilization
 
+TODO
+- Provide CLI functionality for: updating the scaler polling frequency and thresholds.
+
 **Autoscaling service configuration**
 - `DATABASE_URL`: URL of the database from which the autoscaler scrapes relevant data
 - `INFLUXDB_TOKEN` : Token to enable access to the database
 - `INFLUXDB_ORG`: 'greenlab'
-- `POLLING_FREQ`: At what frequency to update scales (in minutes)
-- `SCALE_UP_THRESHOLD` : CPU utilization at which to try scaling a service up (in percentages)
-- `SCALE_DOWN_THRESHOLD` : CPU utilization at which to try scaling a service down (in percentages)
-- `SCALABLE_STACK`: Name of the stack to apply scaling to
+
+- `DEFAULT_POLLING_FREQ`: At what frequency to update scales (in minutes)
+- `DEFAULT_SCALE_UP_THRESHOLD` : CPU utilization at which to try scaling a service up (in percentages)
+- `DEFAULT_SCALE_DOWN_THRESHOLD` : CPU utilization at which to try scaling a service down (in percentages)
 
 **Scalable Service Configuration**
 In order for this autoscaler to work the following requirements must be met:
