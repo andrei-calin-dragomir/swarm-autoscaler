@@ -1,19 +1,16 @@
-# swarm-orchestrator
+# swarm-autoscaler
 Container autoscaler for docker swarm stacks.
 
 ## Autoscaler (Work in progress)
 This autoscaler makes use of the data sourced from CAdvisor and provides automated scaling based on the following parameters:
 - CPU Utilization
 
-TODO
-- Provide CLI functionality for: updating the scaler polling frequency and thresholds.
-
 **Autoscaling service configuration**
 - `DATABASE_URL`: URL of the database from which the autoscaler scrapes relevant data
 - `INFLUXDB_TOKEN` : Token to enable access to the database
 - `INFLUXDB_ORG`: 'greenlab'
 
-- `DEFAULT_POLLING_FREQ`: At what frequency to update scales (in minutes)
+- `DEFAULT_POLLING_FREQ`: At what frequency to read service CPU utilizations and update service replicas (in minutes)
 - `DEFAULT_SCALE_UP_THRESHOLD` : CPU utilization at which to try scaling a service up (in percentages)
 - `DEFAULT_SCALE_DOWN_THRESHOLD` : CPU utilization at which to try scaling a service down (in percentages)
 
@@ -38,13 +35,8 @@ scalable-service:
 
 ## Deployment
 
-Fill in the configuration for your specific influxDB instance and stack of interest before deploying.
-
-### Stand-alone version (future)
-This deploys the autoscaler with the services it requires to gather data.
-
 ### Plug-and-play version
-This deploys the autoscaler attaching it to an already existing data source for CAdvisor metrics (or other data sources)
+This deploys the autoscaler attaching it to the [Monitoring Stack](https://github.com/vnzstc/swarm-monitoring.git) in order to extract the required data about the active nodes within the docker swarm.
 
 1. Fill up your own configuration in the docker-compose.yml
 2. `docker-compose build autoscaler`
