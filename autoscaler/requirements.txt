@@ -1,3 +1,2 @@
-Flask
 influxdb_client
 python_on_whales

@@ -9,6 +9,3 @@ else
     echo "Error: Docker socket not found"
     exit 1
 fi
-
-# Run the Flask app
-exec python app.py

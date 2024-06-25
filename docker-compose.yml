@@ -14,8 +14,6 @@ services:
   
     networks: 
       - greenlab-network
-    ports:
-      - "15000:5000"
 
     environment:
       INFLUXDB_URL: 'http://influxdb:18086'
